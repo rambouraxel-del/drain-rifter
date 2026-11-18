@@ -15,7 +15,7 @@ export const CONFIG = {
     /** Fraction of the half width that is flat floor; beyond it the wall curves up. */
     flatFraction: 0.45,
     /** Player may travel up to this fraction of the half width. */
-    usableFraction: 0.86,
+    usableFraction: 0.9,
   },
   chunk: {
     /** Length of one rendered tunnel chunk (m). */
@@ -26,20 +26,26 @@ export const CONFIG = {
   player: {
     radius: 0.42,
     /** Max lateral speed (m/s). */
-    maxLateralSpeed: 11,
+    maxLateralSpeed: 12,
     /** Lateral acceleration (m/s²) for keyboard steering. */
-    lateralAccel: 55,
+    lateralAccel: 60,
     /** Damping factor for lateral velocity when no input (1/s). */
-    lateralDamping: 8,
+    lateralDamping: 6,
     /** Spring stiffness when following a touch target (1/s²). */
-    followStiffness: 140,
-    followDamping: 20,
+    followStiffness: 95,
+    followDamping: 16.5,
+    /** Touch: 1 screen width of drag = this many track widths (at sensitivity 1). */
+    dragGain: 1.25,
+    /** Centrifugal drift strength in curves (subtle). */
+    drift: 0.010,
+    /** Extra pull towards the floor centre while riding up a wall (1/s²). */
+    wallPull: 3.0,
   },
   speed: {
     start: 15,
-    max: 46,
+    max: 45,
     /** Distance (m) at which speed reaches ~63% of the way to max. */
-    rampDistance: 2600,
+    rampDistance: 3000,
   },
   biome: {
     /** Length of a biome (m) before transitioning. */

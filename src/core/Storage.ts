@@ -9,9 +9,9 @@ export const DEFAULT_SETTINGS: Settings = { musicVolume: 0.6, sfxVolume: 0.8, se
 function read<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
+    if (!raw) return { ...fallback };
     return { ...fallback, ...JSON.parse(raw) } as T;
-  } catch { return fallback; }
+  } catch { return { ...fallback }; }
 }
 function write(key: string, v: unknown): void {
   try { localStorage.setItem(key, JSON.stringify(v)); } catch { /* private mode */ }
