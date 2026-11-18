@@ -3,7 +3,7 @@ import { CONFIG } from './config';
 import { Input } from './Input';
 import { resolveQuality } from './Quality';
 import { Storage } from './Storage';
-import type { GameState, QualitySettings, Settings } from './types';
+import type { GameState, QualitySettings, Settings, SpineFrame } from './types';
 import { Spine, makeFrame, profileHeight, profileSlope } from '../track/Spine';
 import { TrackGenerator } from '../track/TrackGenerator';
 import { ChunkManager } from '../world/ChunkManager';
@@ -69,6 +69,9 @@ export class Game {
   private shake = 0;
   /** Debug/testing hooks. */
   invincible = false;
+  /** Autopilot (tests): when enabled and a driver is set, it steers by setting input.keyAxis. */
+  autopilot = false;
+  autopilotDrive: ((input: Input, player: PlayerController, obstacles: ObstacleManager, frame: SpineFrame) => void) | null = null;
 
   constructor(container: HTMLElement) {
     this.settings = Storage.loadSettings();
@@ -283,8 +286,9 @@ export class Game {
 
   private updateMenu(dt: number): void {
     // Slow attract-mode drift down the first tunnel, camera ahead of the start.
-    this.player.s += dt * 3;
-    if (this.player.s > 100) this.player.s = 0;
+    if (this.player.s < 20) this.player.s = 20;
+    this.player.s += dt * 4;
+    if (this.player.s > 140) { this.player.s = 20; this.snapCamera(); }
     this.updateWorld(0, false);
     this.placeCharacter();
     this.character.update(dt, this.pose());
@@ -294,6 +298,7 @@ export class Game {
   private updatePlaying(dt: number): void {
     const seg = this.spine.segmentAt(this.player.s);
     this.spine.frame(this.player.s, this.frame);
+    if (this.autopilot && this.autopilotDrive) this.autopilotDrive(this.input, this.player, this.obstacles, this.frame);
     this.player.update(dt, this.input, this.frame, seg.yawRate);
     this.updateWorld(dt, true);
     this.placeCharacter();

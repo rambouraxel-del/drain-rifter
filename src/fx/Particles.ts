@@ -25,11 +25,11 @@ interface BiomeFx {
 }
 
 const FX: Record<BiomeId, BiomeFx> = {
-  sewer: { spray: { color: 0x8fd8ff, size: 0.1, g: 9, life: 0.8, carry: 0.35, rate: 1.1, jitter: 2.2 }, amb: { color: 0x7fc8a0, size: 0.1, fall: 5.5, sway: 0.1 } },
-  industrial: { spray: { color: 0xffa040, size: 0.06, g: 8, life: 0.6, carry: 0.55, rate: 0.9, jitter: 3.2 }, amb: { color: 0xff7a30, size: 0.1, fall: -0.9, sway: 0.5 } },
-  cavern: { spray: { color: 0xcdb08a, size: 0.18, g: 2.5, life: 1.0, carry: 0.25, rate: 0.9, jitter: 1.6 }, amb: { color: 0xb8c8d8, size: 0.09, fall: 0.15, sway: 0.25 } },
-  ruins: { spray: { color: 0xe0c090, size: 0.2, g: 2, life: 1.1, carry: 0.25, rate: 1.0, jitter: 1.5 }, amb: { color: 0xffe0a0, size: 0.09, fall: 0.1, sway: 0.3 } },
-  abyss: { spray: { color: 0x70f0ff, size: 0.1, g: -0.6, life: 1.4, carry: 0.2, rate: 0.9, jitter: 1.6 }, amb: { color: 0xb080ff, size: 0.16, fall: -0.2, sway: 0.6 } },
+  sewer: { spray: { color: 0x8fd8ff, size: 0.05, g: 9, life: 0.45, carry: 0.35, rate: 1.8, jitter: 2.2 }, amb: { color: 0x7fc8a0, size: 0.1, fall: 5.5, sway: 0.1 } },
+  industrial: { spray: { color: 0xffa040, size: 0.035, g: 8, life: 0.4, carry: 0.55, rate: 1.6, jitter: 3.2 }, amb: { color: 0xff7a30, size: 0.1, fall: -0.9, sway: 0.5 } },
+  cavern: { spray: { color: 0xcdb08a, size: 0.06, g: 2.5, life: 0.5, carry: 0.3, rate: 1.9, jitter: 1.6 }, amb: { color: 0xb8c8d8, size: 0.09, fall: 0.15, sway: 0.25 } },
+  ruins: { spray: { color: 0xe0c090, size: 0.065, g: 2, life: 0.55, carry: 0.3, rate: 1.9, jitter: 1.5 }, amb: { color: 0xffe0a0, size: 0.09, fall: 0.1, sway: 0.3 } },
+  abyss: { spray: { color: 0x70f0ff, size: 0.05, g: -0.6, life: 0.7, carry: 0.25, rate: 1.6, jitter: 1.6 }, amb: { color: 0xb080ff, size: 0.16, fall: -0.2, sway: 0.6 } },
 };
 
 const VERT = /* glsl */ `
@@ -43,7 +43,7 @@ void main() {
   float d = -mv.z;
   float fade = smoothstep(uFar, uFar * 0.55, d) * smoothstep(0.35, 1.6, d);
   vColor = aColor * fade;
-  gl_PointSize = clamp(aSize * uScale / max(d, 0.1), 0.0, 48.0) * step(0.0001, aSize);
+  gl_PointSize = clamp(aSize * uScale / max(d, 0.1), 0.0, 18.0) * step(0.0001, aSize);
   gl_Position = projectionMatrix * mv;
 }`;
 const FRAG = /* glsl */ `
@@ -138,7 +138,7 @@ export class Particles {
   private up = new THREE.Vector3();
   private lastS = 0;
 
-  private static SPRAY_CAP = 220;
+  private static SPRAY_CAP = 360;
   private static AMB_CAP = 150;
   private static BURST_CAP = 160;
 
@@ -255,7 +255,7 @@ export class Particles {
         sp.vel[i * 3 + 2] = f.fwd.z * fw + f.up.z * up + f.right.z * rt + jt * 0.2;
         sp.life[i] = sp.maxLife[i] = sc.life * (0.6 + Math.random() * 0.7);
         sp.baseSize[i] = sc.size * (0.6 + Math.random() * 0.9);
-        sp.base[i * 3] = _c.r; sp.base[i * 3 + 1] = _c.g; sp.base[i * 3 + 2] = _c.b;
+        sp.base[i * 3] = _c.r * 0.5; sp.base[i * 3 + 1] = _c.g * 0.5; sp.base[i * 3 + 2] = _c.b * 0.5;
       }
     }
     this.step(sp, dt, fx.spray.g, 1.2, 0.9);
