@@ -89,6 +89,7 @@ export class Character {
   constructor() {
     const m = materials();
     this.root.add(this.rig);
+    this.root.scale.setScalar(1.15);
 
     // Hips / pelvis: seated, slightly above the ground.
     this.hips = group(0, 0.17, 0.12, this.rig);
@@ -199,7 +200,7 @@ export class Character {
     this.hips.position.x = lean * 0.05;
 
     // Torso reclined, rolls extra into the lean, leans back more with speed.
-    const recline = 0.8 + 0.18 * sp + 0.03 * bump;
+    const recline = 0.55 + 0.18 * sp + 0.03 * bump;
     this.torso.rotation.set(recline, lean * 0.14, -lean * 0.18);
 
     // Head looks ahead (cancel recline), turns into the turn, hood/hair bob.
@@ -220,21 +221,21 @@ export class Character {
     this.poseArm(this.armL, dragL, t, sp, lean);
 
     // Legs: slightly apart, boots rattle, react to lean (inner leg bends, outer extends).
-    const lr = 1.85 + 0.02 * buzz * sp - lean * 0.05;
-    const ll = 1.85 + 0.02 * Math.sin(t * 57) * sp + lean * 0.05;
-    this.legR.hip.rotation.set(lr, -0.3 - lean * 0.08, -0.08);
+    const lr = 1.75 + 0.02 * buzz * sp - lean * 0.05;
+    const ll = 1.75 + 0.02 * Math.sin(t * 57) * sp + lean * 0.05;
+    this.legR.hip.rotation.set(lr, -0.28 - lean * 0.08, -0.08);
     this.legL.hip.rotation.set(ll, 0.3 - lean * 0.08, 0.08);
-    this.legR.knee.rotation.set(-0.3 + Math.max(0, -lean) * 0.35 + 0.03 * bump, 0, 0);
-    this.legL.knee.rotation.set(-0.3 + Math.max(0, lean) * 0.35 - 0.03 * bump, 0, 0);
+    this.legR.knee.rotation.set(-0.5 + Math.max(0, -lean) * 0.35 + 0.03 * bump, 0, 0);
+    this.legL.knee.rotation.set(-0.5 + Math.max(0, lean) * 0.35 - 0.03 * bump, 0, 0);
   }
 
   /** drag 0 = arm out for balance, 1 = hand trailing on the ground. */
   private poseArm(a: Arm, drag: number, t: number, sp: number, lean: number): void {
     const s = a.side;
     // Balance pose: arm raised out to the side and a little forward.
-    const outZ = s * 0.85, outX = 0.15, outElbow = -0.9;
+    const outZ = s * 0.5, outX = -0.3, outElbow = -1.0;
     // Drag pose: arm reaching down/out/back, hand on the surface beside and behind the hip.
-    const dZ = s * 0.3, dX = -1.1, dElbow = -0.05;
+    const dZ = s * 0.32, dX = -0.95, dElbow = -0.05;
     const flutter = Math.sin(t * 9 + (s > 0 ? 0 : 2)) * 0.06 * (0.3 + sp);
     // Counterbalance: the free arm swings up when leaning away.
     const free = 1 - drag;
