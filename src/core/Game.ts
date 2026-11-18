@@ -17,6 +17,8 @@ import { UI } from '../ui/UI';
 import { AudioManager } from '../audio/AudioManager';
 import { IntroCinematic } from '../fx/IntroCinematic';
 import { Particles } from '../fx/Particles';
+import { PerfMonitor } from './PerfMonitor';
+import { SpeedLines } from '../fx/SpeedLines';
 
 const _m = new THREE.Matrix4();
 const _v = new THREE.Vector3();
@@ -43,6 +45,8 @@ export class Game {
   readonly audio = new AudioManager();
   private particles: Particles;
   private intro: IntroCinematic | null = null;
+  private perf: PerfMonitor;
+  private speedLines = new SpeedLines();
 
   private hemi = new THREE.HemisphereLight(0xffffff, 0x222222, 1);
   private key = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -69,6 +73,7 @@ export class Game {
   constructor(container: HTMLElement) {
     this.settings = Storage.loadSettings();
     this.quality = resolveQuality(this.settings.quality);
+    this.perf = new PerfMonitor(this.quality, this.settings.quality);
     this.renderer = new THREE.WebGLRenderer({ antialias: this.quality.level !== 'low', powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(this.quality.pixelRatio);
     this.renderer.setSize(container.clientWidth, container.clientHeight);
@@ -79,6 +84,7 @@ export class Game {
     this.scene.add(this.hemi, this.key, this.key.target, this.playerLight, this.character.root, this.camera);
     this.particles = new Particles(this.quality.particles);
     this.scene.add(this.particles.root);
+    this.camera.add(this.speedLines.root);
     this.input = new Input(this.renderer.domElement);
     this.input.onAnyKey = (code) => {
       if (code === 'Escape' || code === 'KeyP') {
@@ -155,6 +161,7 @@ export class Game {
     this.intro = null;
     this.state = 'playing';
     this.input.reset();
+    this.perf.reset();
     this.ui.showHud();
     this.ui.showControlsHint();
     this.snapCamera();
@@ -172,6 +179,7 @@ export class Game {
     this.state = 'playing';
     this.ui.showHud();
     this.input.reset();
+    this.perf.reset();
     this.audio.setMode('game');
   }
 
@@ -203,7 +211,8 @@ export class Game {
     this.player.sensitivity = s.sensitivity;
     this.audio.setVolumes(s.musicVolume, s.sfxVolume);
     if (s.quality !== prevQ) {
-      this.quality = resolveQuality(s.quality);
+      this.quality = this.perf.setPreference(s.quality);
+      this.particles.setBudget(this.quality.particles);
       this.renderer.setPixelRatio(this.quality.pixelRatio);
       this.resize();
     }
@@ -247,6 +256,17 @@ export class Game {
         this.character.update(dt, this.pose());
         break;
     }
+    if (this.state === 'playing') {
+      const q = this.perf.update(rawDt);
+      if (q) {
+        this.quality = q;
+        this.renderer.setPixelRatio(q.pixelRatio);
+        this.resize();
+        this.particles.setBudget(q.particles);
+      }
+    } else if (this.state !== 'paused') {
+      this.speedLines.update(dt, 0);
+    }
     this.updateAtmosphere(dt);
     this.audio.update(dt, {
       playing: this.state === 'playing',
@@ -281,6 +301,7 @@ export class Game {
     this.ui.updateHud(this.player.s, this.player.speed, this.fps);
     const k = (this.player.speed - CONFIG.speed.start) / (CONFIG.speed.max - CONFIG.speed.start);
     this.ui.setSpeedFx(Math.max(0, Math.min(1, k)));
+    this.speedLines.update(dt, Math.max(0, Math.min(1, k)));
     const biome = this.spine.biomeAt(this.player.s);
     if (biome !== this.lastBiome) {
       if (this.lastBiome) { this.ui.showBiomeTitle(BIOMES[biome].name); this.audio.play('biome'); }

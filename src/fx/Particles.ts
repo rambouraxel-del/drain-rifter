@@ -25,11 +25,11 @@ interface BiomeFx {
 }
 
 const FX: Record<BiomeId, BiomeFx> = {
-  sewer: { spray: { color: 0x8fd8ff, size: 0.16, g: 9, life: 0.8, carry: 0.35, rate: 1.1, jitter: 2.2 }, amb: { color: 0x7fc8a0, size: 0.1, fall: 5.5, sway: 0.1 } },
-  industrial: { spray: { color: 0xffa040, size: 0.1, g: 8, life: 0.6, carry: 0.55, rate: 0.9, jitter: 3.2 }, amb: { color: 0xff7a30, size: 0.1, fall: -0.9, sway: 0.5 } },
-  cavern: { spray: { color: 0xcdb08a, size: 0.26, g: 2.5, life: 1.0, carry: 0.25, rate: 0.9, jitter: 1.6 }, amb: { color: 0xb8c8d8, size: 0.09, fall: 0.15, sway: 0.25 } },
-  ruins: { spray: { color: 0xe0c090, size: 0.3, g: 2, life: 1.1, carry: 0.25, rate: 1.0, jitter: 1.5 }, amb: { color: 0xffe0a0, size: 0.09, fall: 0.1, sway: 0.3 } },
-  abyss: { spray: { color: 0x70f0ff, size: 0.14, g: -0.6, life: 1.4, carry: 0.2, rate: 0.9, jitter: 1.6 }, amb: { color: 0xb080ff, size: 0.16, fall: -0.2, sway: 0.6 } },
+  sewer: { spray: { color: 0x8fd8ff, size: 0.1, g: 9, life: 0.8, carry: 0.35, rate: 1.1, jitter: 2.2 }, amb: { color: 0x7fc8a0, size: 0.1, fall: 5.5, sway: 0.1 } },
+  industrial: { spray: { color: 0xffa040, size: 0.06, g: 8, life: 0.6, carry: 0.55, rate: 0.9, jitter: 3.2 }, amb: { color: 0xff7a30, size: 0.1, fall: -0.9, sway: 0.5 } },
+  cavern: { spray: { color: 0xcdb08a, size: 0.18, g: 2.5, life: 1.0, carry: 0.25, rate: 0.9, jitter: 1.6 }, amb: { color: 0xb8c8d8, size: 0.09, fall: 0.15, sway: 0.25 } },
+  ruins: { spray: { color: 0xe0c090, size: 0.2, g: 2, life: 1.1, carry: 0.25, rate: 1.0, jitter: 1.5 }, amb: { color: 0xffe0a0, size: 0.09, fall: 0.1, sway: 0.3 } },
+  abyss: { spray: { color: 0x70f0ff, size: 0.1, g: -0.6, life: 1.4, carry: 0.2, rate: 0.9, jitter: 1.6 }, amb: { color: 0xb080ff, size: 0.16, fall: -0.2, sway: 0.6 } },
 };
 
 const VERT = /* glsl */ `
