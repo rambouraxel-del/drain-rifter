@@ -85,6 +85,16 @@ Tout est stocké dans le navigateur de l'appareil (`localStorage`). Rien n'est e
 
 En qualité Auto, le jeu réduit automatiquement la résolution et la distance d'affichage si la fréquence d'images baisse. Effacer les données du site dans le navigateur réinitialise tous ces éléments. En navigation privée, rien n'est conservé, mais le jeu fonctionne normalement.
 
+## Lien jouable
+
+Version jouable sur smartphone (artifact claude.ai privé, à partager depuis le menu Partager) :
+https://claude.ai/artifact/8Zwvi6Tu5xnmbKJYKCwfwx — regénérer avec `npm run build:artifact` (fichier `dist-artifact/drain-rifter.html`).
+
 ## Limitations connues
 
-À compléter par le lead.
+- Performances mesurées uniquement en rendu logiciel (SwiftShader, sans GPU) : 15–45 FPS dans ces conditions, ~70–140 draw calls, 10–32 k triangles. Le 60 FPS sur vrai téléphone reste à confirmer ; la qualité « Auto » baisse automatiquement la résolution si le jeu rame.
+- Audio 100 % procédural, jamais écouté par un humain : volumes et timbres à régler à l'oreille.
+- Vu de dos, les jambes du personnage sont en partie masquées par le buste.
+- Pas de vrai test sur iPhone/Android physique (seulement émulation mobile Chromium).
+- Le personnage reste immobile une fraction de seconde à l'atterrissage de la cinématique avant la reprise du jeu.
+
