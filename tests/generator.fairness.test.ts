@@ -102,10 +102,13 @@ function simulate(seed: number, len: number, vLat = 6, delay = 0.25) {
       let cur: Interval[] = [{ lo: u, hi: u }];
       const seq: Interval[][] = [];
       let sPrev = s;
+      let latRem = delay;
       for (let j = pi; j < pieces.length && pieces[j].s0 < s + 170; j++) {
         const p = pieces[j];
         const a = Math.max(p.s0, s);
-        const reach = vLat * Math.max(0, p.s1 - Math.max(sPrev, a)) / speedAt((a + p.s1) / 2);
+        const pdt = Math.max(0, p.s1 - Math.max(sPrev, a)) / speedAt((a + p.s1) / 2);
+        const reach = vLat * Math.max(0, pdt - latRem);
+        latRem = Math.max(0, latRem - pdt);
         sPrev = p.s1;
         const nx: Interval[] = [];
         for (const c0 of p.F) {
@@ -124,7 +127,7 @@ function simulate(seed: number, len: number, vLat = 6, delay = 0.25) {
       // backtrack from the widest final component's centre
       if (seq.length) {
         const last = seq[seq.length - 1];
-        const best = last.reduce((x, y) => (y.hi - y.lo > x.hi - x.lo ? y : x));
+        const best = last.reduce((x, y) => (Math.abs((y.lo + y.hi) / 2 - u) < Math.abs((x.lo + x.hi) / 2 - u) ? y : x));
         const tg: number[] = new Array(seq.length);
         tg[seq.length - 1] = (best.lo + best.hi) / 2;
         for (let j = seq.length - 2; j >= 0; j--) {

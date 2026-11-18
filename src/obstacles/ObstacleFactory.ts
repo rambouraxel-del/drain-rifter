@@ -62,7 +62,6 @@ function fallbackBox(spec: ObstacleSpec): THREE.Group {
     new THREE.MeshLambertMaterial({ color: 0xc8a040, flatShading: true }),
   );
   mesh.position.y = 0.65;
-  mesh.userData.shared = false;
   g.add(mesh);
   return g;
 }
