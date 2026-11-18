@@ -221,12 +221,12 @@ export class Character {
     this.poseArm(this.armL, dragL, t, sp, lean);
 
     // Legs: slightly apart, boots rattle, react to lean (inner leg bends, outer extends).
-    const lr = 1.75 + 0.02 * buzz * sp - lean * 0.05;
-    const ll = 1.75 + 0.02 * Math.sin(t * 57) * sp + lean * 0.05;
-    this.legR.hip.rotation.set(lr, -0.28 - lean * 0.08, -0.08);
-    this.legL.hip.rotation.set(ll, 0.3 - lean * 0.08, 0.08);
-    this.legR.knee.rotation.set(-0.5 + Math.max(0, -lean) * 0.35 + 0.03 * bump, 0, 0);
-    this.legL.knee.rotation.set(-0.5 + Math.max(0, lean) * 0.35 - 0.03 * bump, 0, 0);
+    const lr = 2.15 + 0.02 * buzz * sp - lean * 0.05;
+    const ll = 2.15 + 0.02 * Math.sin(t * 57) * sp + lean * 0.05;
+    this.legR.hip.rotation.set(lr, -0.42 - lean * 0.08, -0.08);
+    this.legL.hip.rotation.set(ll, 0.42 - lean * 0.08, 0.08);
+    this.legR.knee.rotation.set(-0.95 + Math.max(0, -lean) * 0.35 + 0.03 * bump, 0, 0);
+    this.legL.knee.rotation.set(-0.95 + Math.max(0, lean) * 0.35 - 0.03 * bump, 0, 0);
   }
 
   /** drag 0 = arm out for balance, 1 = hand trailing on the ground. */

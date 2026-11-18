@@ -376,7 +376,7 @@ export class Game {
     const lateral = this.player.u * 0.55;
     const target = _v.copy(cf.pos).addScaledVector(cf.right, lateral).addScaledVector(cf.up, C.height + profileHeight(lateral, cf.width) * 0.5);
     this.spine.frame(s + C.lookAhead, this.camFrame);
-    const look = _v2.copy(this.camFrame.pos).addScaledVector(this.camFrame.right, this.player.u * 0.3).addScaledVector(this.camFrame.up, 0.6);
+    const look = _v2.copy(this.camFrame.pos).addScaledVector(this.camFrame.right, this.player.u * 0.3).addScaledVector(this.camFrame.up, 0.2);
     if (menu) { target.addScaledVector(cf.up, 0.6); }
     const k = snap ? 1 : 1 - Math.exp(-dt * 12);
     this.camPos.lerp(target, k);

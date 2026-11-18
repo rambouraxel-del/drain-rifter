@@ -55,8 +55,8 @@ export const CONFIG = {
   camera: {
     fovBase: 68,
     fovMaxBoost: 14,
-    height: 3.1,
-    distance: 5.0,
-    lookAhead: 9,
+    height: 3.3,
+    distance: 4.3,
+    lookAhead: 8,
   },
 } as const;
