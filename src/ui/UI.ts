@@ -73,8 +73,8 @@ export class UI {
         <div class="hud-r"><div class="pill">${FLAG}<span class="dist">0&nbsp;m</span></div><div class="pill fps" hidden>60 FPS</div></div>
       </div>
       <div class="hint"><div class="pill">${touch
-        ? '<span>Glisse ton doigt&nbsp;<span class="arrows">&larr;&nbsp;&rarr;</span>&nbsp;pour te déplacer</span>'
-        : '<span><span class="arrows">&larr;&nbsp;&rarr;</span>&nbsp;ou Q / D, ou glisse la souris</span>'}</div></div>
+        ? '<span>Glisse<span class="arrows">&larr;&nbsp;&rarr;</span>pour te déplacer</span>'
+        : '<span><span class="arrows">&larr;&nbsp;&rarr;</span>ou Q / D pour bouger</span>'}</div></div>
       <div class="biome"><div class="kicker">Nouvelle zone</div><div class="rule"></div><div class="name"></div></div>
       <div class="scr" id="scr-menu">
         <div class="top">
