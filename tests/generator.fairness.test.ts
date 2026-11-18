@@ -138,11 +138,11 @@ function simulate(seed: number, len: number, vLat = 6, delay = 0.25) {
         // aim ~0.5 s ahead, clamped to the free component we are in now
         let jj = seq.length - 1;
         for (let j = 0; j < seq.length; j++) if (pieces[pi + j].s0 >= s + 0.5 * v) { jj = j; break; }
+        for (let j = 0; j < jj; j++) if (pieces[pi + j].blocked) { jj = j; break; }
         const f0 = pieces[pi].F.map((c) => ({ lo: c.lo + (c.hi - c.lo > 0.4 ? 0.1 : 0), hi: c.hi - (c.hi - c.lo > 0.4 ? 0.1 : 0) }));
         const comp = f0.find((c) => u >= c.lo - 1e-6 && u <= c.hi + 1e-6) ?? f0.reduce((x, y) => (Math.abs((y.lo + y.hi) / 2 - u) < Math.abs((x.lo + x.hi) / 2 - u) ? y : x), f0[0]);
         target = comp ? Math.max(comp.lo, Math.min(comp.hi, tg[jj])) : tg[jj];
       }
-      if (process.env.DBG && s > 100 && s < 170 && seed === 42) console.log(s.toFixed(1), u.toFixed(2), target.toFixed(2), seq.length, pi);
       queue.push({ at: t + delay, u: target });
     }
     while (queue.length && queue[0].at <= t) applied = queue.shift()!.u;

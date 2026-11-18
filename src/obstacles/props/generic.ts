@@ -141,13 +141,13 @@ export function buildSwinger(spec: ObstacleSpec, _rng: RNG): THREE.Group {
 
 // ------------------------------------------------------------------ debris
 
-const DEBRIS_CAP = 26;
+const DEBRIS_CAP = 40;
 
 /** Scatter of debris; the look depends on the biome (planks, scrap, rocks, bricks, shards). */
 export function buildDebris(spec: ObstacleSpec, rng: RNG): THREE.Group {
   const g = new THREE.Group();
   const W = widthOf(spec), D = depthOf(spec);
-  const n = Math.min(DEBRIS_CAP, Math.max(8, Math.round(W * D * 3)));
+  const n = Math.min(DEBRIS_CAP, Math.max(8, Math.round(W * D * 4)));
   const spots = moundSpots(rng, W, D, n, 1.25, 0.4);
   const rockM = solid(0x8e7d68);
   const shardM = mat(0x2b2540, 0x4a2a80, 0.6);

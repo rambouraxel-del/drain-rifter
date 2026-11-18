@@ -59,7 +59,7 @@ export function buildRubble(spec: ObstacleSpec, rng: RNG): THREE.Group {
   const cols = [solid(0xa99a7a), solid(0x8a7c62), solid(0xc4b491)];
 
   box(g, base, [W * 0.96, 0.5, D * 0.96], [0, 0.25, 0]);
-  const n = Math.min(26, Math.max(8, Math.round(W * D * 2.5)));
+  const n = Math.min(40, Math.max(8, Math.round(W * D * 3.5)));
   for (const [x, y, z] of moundSpots(rng, W, D, n, 1.1, 0.5)) {
     const s = rng.range(0.22, 0.42);
     rock(g, rng.pick(cols), [s * rng.range(0.9, 1.3), s * rng.range(0.7, 1.0), s * rng.range(0.9, 1.3)], [x, y, z], rng.int(0, 5), 0, [0, rng.range(0, PI), 0]);
