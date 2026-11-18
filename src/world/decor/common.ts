@@ -58,12 +58,12 @@ export function vine(ctx: Ctx, top: V3, length: number, seed: number, glowHex = 
     next.y -= length * t;
     const col = Cs(leaf, 0.7 + 0.5 * hash2(seed, i));
     const side = V(w.z, 0, -w.x);
-    const wd = 0.1 + 0.07 * (1 - t);
+    const wd = 0.05 + 0.035 * (1 - t);
     kit.lit.quad(prev.clone().addScaledVector(side, -wd), prev.clone().addScaledVector(side, wd), next.clone().addScaledVector(side, wd * 0.6), next.clone().addScaledVector(side, -wd * 0.6), col);
     if (i % 2 === 0) {
       // leaf tuft
       const l = next.clone();
-      kit.lit.tri(l.clone().addScaledVector(side, -0.28), l.clone().addScaledVector(side, 0.28), l.clone().add(V(0, -0.45, 0)).addScaledVector(w, 0.1), Cs(leaf, 1.0 + 0.4 * hash2(seed, i + 9)));
+      kit.lit.tri(l.clone().addScaledVector(side, -0.17), l.clone().addScaledVector(side, 0.17), l.clone().add(V(0, -0.3, 0)).addScaledVector(w, 0.06), Cs(leaf, 1.0 + 0.4 * hash2(seed, i + 9)));
     }
     prev = next;
   }

@@ -392,7 +392,7 @@ function movingBuild(c: PatternCtx, kind: ObstacleKind): ObstacleSpec[] | null {
 const moving: PatternDef = {
   name: 'moving',
   minD: 0.12,
-  weight: (c) => (c.kinds.dyn.some((k) => k === 'slider' || k === 'swinger') ? 2.2 : 0),
+  weight: (c) => (c.kinds.dyn.some((k) => k === 'slider' || k === 'swinger') ? 3.5 : 0),
   build(c) {
     const k = dynKindChoice(c, ['slider', 'swinger']);
     if (!k) return null;
@@ -412,7 +412,7 @@ const moving: PatternDef = {
 const fallingGate: PatternDef = {
   name: 'fallingGate',
   minD: 0.1,
-  weight: (c) => (c.kinds.dyn.includes('falling') ? 2.2 : 0),
+  weight: (c) => (c.kinds.dyn.includes('falling') ? 1.5 : 0),
   build(c) {
     const kind: ObstacleKind = 'falling';
     const depth = rowDepth(c, kind);
@@ -426,7 +426,7 @@ const fallingGate: PatternDef = {
 const collapse: PatternDef = {
   name: 'collapse',
   minD: 0.3,
-  weight: (c) => (c.kinds.dyn.includes('falling') ? 1.8 : 0),
+  weight: (c) => (c.kinds.dyn.includes('falling') ? 1.1 : 0),
   build(c) {
     const kind: ObstacleKind = 'falling';
     const depth = rowDepth(c, kind);

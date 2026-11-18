@@ -324,8 +324,8 @@ export class TrackGenerator implements SegmentSource {
       }
       if (!committed) { this.obsCursor += 25; continue; }
       // Time until the next pattern shrinks with difficulty; sometimes chain tightly.
-      let dt = 2.6 - 1.75 * d + r.range(0, 0.55);
-      if (r.chance(0.12 + 0.2 * d)) dt = Math.max(0.75, dt * 0.55);
+      let dt = 2.5 - 1.8 * d + r.range(0, 0.45);
+      if (r.chance(0.12 + 0.25 * d)) dt = Math.max(0.7, dt * 0.55);
       this.obsCursor = endS + speedAt(endS) * dt;
     }
     // Memory: drop specs far behind.
