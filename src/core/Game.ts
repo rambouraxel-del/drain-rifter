@@ -67,10 +67,12 @@ export class Game {
   fps = 60;
   private clock = new THREE.Clock();
   private shake = 0;
+  private wasScraping = false;
   /** Debug/testing hooks. */
   invincible = false;
   /** Autopilot (tests): when enabled and a driver is set, it steers by setting input.keyAxis. */
   autopilot = false;
+  lastDeath: Record<string, unknown> | null = null;
   autopilotDrive: ((input: Input, player: PlayerController, obstacles: ObstacleManager, frame: SpineFrame) => void) | null = null;
 
   constructor(container: HTMLElement) {
@@ -161,6 +163,7 @@ export class Game {
   }
 
   private beginPlay(): void {
+    if (this.intro) this.audio.play('splash');
     this.intro?.dispose();
     this.intro = null;
     this.state = 'playing';
@@ -304,6 +307,8 @@ export class Game {
     this.placeCharacter();
     this.character.update(dt, this.pose());
     this.updateCamera(dt);
+    if (this.player.scraping && !this.wasScraping) this.audio.play('scrape');
+    this.wasScraping = this.player.scraping;
     this.ui.updateHud(this.player.s, this.player.speed, this.fps);
     const k = (this.player.speed - CONFIG.speed.start) / (CONFIG.speed.max - CONFIG.speed.start);
     this.ui.setSpeedFx(Math.max(0, Math.min(1, k)));
@@ -313,7 +318,12 @@ export class Game {
       if (this.lastBiome) { this.ui.showBiomeTitle(BIOMES[biome].name); this.audio.play('biome'); }
       this.lastBiome = biome;
     }
-    if (!this.invincible && this.obstacles.hitTest(this.player.s, this.player.u, CONFIG.player.radius)) this.die();
+    const hit = this.invincible ? null : this.obstacles.hitTest(this.player.s, this.player.u, CONFIG.player.radius);
+    if (hit) {
+      const c = this.obstacles.collider(hit);
+      this.lastDeath = { kind: hit.spec.kind, s: this.player.s, u: this.player.u, obsS: hit.spec.s, obsU: hit.u, halfWidth: hit.spec.halfWidth, fall: hit.fall, collider: c, visible: hit.obj.visible };
+      this.die();
+    }
   }
 
   /** Stream track, obstacles and particles around the player. */
@@ -427,7 +437,7 @@ export class Game {
     return {
       state: this.state, s: this.player.s, u: this.player.u, speed: this.player.speed, fps: this.fps,
       biome: this.frame.biome, chunks: this.chunks.count, obstacles: this.obstacles.all.length,
-      drawCalls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles,
+      lastDeath: this.lastDeath, drawCalls: this.renderer.info.render.calls, triangles: this.renderer.info.render.triangles,
       geometries: this.renderer.info.memory.geometries, textures: this.renderer.info.memory.textures,
     };
   }

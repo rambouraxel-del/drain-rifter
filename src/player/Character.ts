@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { CONFIG } from '../core/config';
 
 /** Animation inputs, updated every frame by the Game. */
 export interface CharacterPose {
@@ -186,7 +187,7 @@ export class Character {
     const k = 1 - Math.exp(-dt * 12);
     this.lean += (pose.lean - this.lean) * k;
     const lean = this.lean;
-    const sp = clamp01((pose.speed - 12) / 36);
+    const sp = clamp01((pose.speed - CONFIG.speed.start) / (CONFIG.speed.max - CONFIG.speed.start));
     // Vibration: high-frequency rattle + low bumps, growing with speed.
     const vib = (0.004 + 0.012 * sp) * (pose.scraping ? 1.8 : 1);
     const buzz = Math.sin(t * 61) * 0.6 + Math.sin(t * 43.7) * 0.4;

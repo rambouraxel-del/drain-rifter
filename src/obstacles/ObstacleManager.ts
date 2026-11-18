@@ -3,6 +3,7 @@ import type { Collider, ObstacleSpec } from '../core/types';
 import { makeFrame, profileHeight, type Spine } from '../track/Spine';
 import { disposeObject } from '../world/ChunkManager';
 import type { ObstacleMeshFactory } from './ObstacleFactory';
+import { FALL_ACTIVE_AT, FALL_DURATION } from '../track/corridor';
 
 /** Live obstacle. */
 export interface Obstacle {
@@ -86,7 +87,7 @@ export class ObstacleManager {
       const trig = m.triggerAhead ?? 50;
       if (o.fall === 0 && o.spec.s - playerS < trig) { o.fall = 0.0001; this.onEvent('fall-start', o); }
       if (o.fall > 0 && o.fall < 1) {
-        o.fall = Math.min(1, o.fall + dt / 0.9);
+        o.fall = Math.min(1, o.fall + dt / FALL_DURATION);
         if (o.fall >= 1) this.onEvent('fall-land', o);
       }
     }
@@ -116,7 +117,7 @@ export class ObstacleManager {
 
   /** Current collider of an obstacle (null while a falling object is still in the air). */
   collider(o: Obstacle): Collider | null {
-    if (o.spec.motion?.type === 'fall' && o.fall < 0.85) return null;
+    if (o.spec.motion?.type === 'fall' && o.fall < FALL_ACTIVE_AT) return null;
     const hw = o.spec.halfWidth;
     return { s0: o.spec.s - o.spec.depth / 2, s1: o.spec.s + o.spec.depth / 2, u0: o.u - hw, u1: o.u + hw };
   }

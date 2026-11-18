@@ -8,7 +8,7 @@ import { CONFIG } from '../core/config';
  * falls through an open manhole down a vertical shaft, then lands at s=0 on the track.
  * While active it fully drives the camera and the character root transform.
  * update() returns true once finished; the Game then hands control to gameplay at s=0.
- * The final camera / character transform match the gameplay camera exactly (see finalCamera()).
+ * The final camera / character transform match the gameplay camera exactly (see computeFinal()).
  * Everything it adds to the scene is removed in dispose().
  */
 

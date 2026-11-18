@@ -23,7 +23,7 @@ import type { ObstacleSpec, SegmentPlan } from '../core/types';
 export interface Interval { lo: number; hi: number }
 
 export interface CorridorOpts {
-  /** Effective lateral speed (m/s) a bot/player can sustain (max is 11, spring follow ~6-8). */
+  /** Effective lateral speed (m/s) a bot/player can sustain (max is CONFIG.player.maxLateralSpeed, spring follow ~6-8). */
   vLat: number;
   /** Reaction time (s) deducted once per obstacle-free stretch. */
   reaction: number;

@@ -1,7 +1,7 @@
 // Usage: node e2e/shot.mjs <url> <outPrefix> [teleportMeters...]
 // Opens the game in a portrait phone viewport, starts a run (skips intro), takes screenshots
 // and prints debug state + console errors. Invincible mode is enabled so long runs survive.
-import { chromium } from '/opt/node-tools/node_modules/playwright/index.mjs';
+import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
 

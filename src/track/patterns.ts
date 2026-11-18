@@ -32,6 +32,7 @@ export const KIND_INFO: Partial<Record<ObstacleKind, KindInfo>> = {
   debris: { mode: 'solid', hw: [0.5, 1.0], depth: [1.2, 2.0] },
   piston: { mode: 'solid', hw: [0.7, 1.0], depth: [1.2, 1.6] },
   fan: { mode: 'solid', hw: [1.0, 1.6], depth: [0.8, 1.2] },
+  saw: { mode: 'solid', hw: [0.8, 1.2], depth: [0.8, 1.0] },
   rock: { mode: 'solid', hw: [0.6, 1.5], depth: [1.4, 2.4] },
   stalagmite: { mode: 'solid', hw: [0.5, 0.9], depth: [1.0, 1.6] },
   boulder: { mode: 'solid', hw: [0.9, 1.5], depth: [2.0, 3.0] },
@@ -55,7 +56,7 @@ export interface BiomeKinds {
 
 const BASE_KINDS: Record<BiomeId, BiomeKinds> = {
   sewer: { span: ['barrier', 'grate'], solid: ['crate', 'pipe', 'debris'], dyn: [] },
-  industrial: { span: ['beam', 'barrier'], solid: ['piston', 'fan', 'crate'], dyn: ['slider'] },
+  industrial: { span: ['beam', 'barrier'], solid: ['piston', 'fan', 'saw', 'crate'], dyn: ['slider'] },
   cavern: { span: ['root'], solid: ['rock', 'stalagmite', 'boulder'], dyn: ['falling'] },
   ruins: { span: [], solid: ['pillar', 'statue', 'rubble'], dyn: ['swinger', 'falling'] },
   abyss: { span: [], solid: ['crystal', 'shard', 'orb'], dyn: ['slider', 'swinger'] },
