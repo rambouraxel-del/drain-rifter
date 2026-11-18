@@ -22,10 +22,11 @@ export function crystal(ctx: Ctx, base: THREE.Vector3, dir: THREE.Vector3, len: 
 export function decorCavern(ctx: Ctx, a: number, b: number): void {
   const kit = ctx.kit;
   const q = ctx.q;
-  const rockC = C(0x4a4440), rockD = C(0x39342f);
+  const rockC = C(0x424850), rockD = C(0x323a40);
 
   // stalactites
   forSlots(a, b, 3, 0, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 21)) return;
     const cnt = [1, 2, 3][q];
     for (let k = 0; k < cnt; k++) {
@@ -39,8 +40,22 @@ export function decorCavern(ctx: Ctx, a: number, b: number): void {
     }
   });
 
+  // boulders piled along the foot of the walls
+  forSlots(a, b, 3, 0.5, (s, i) => {
+    if (kit.pre) return;
+    if (!ctx.owns(ID, s, i * 5 + 29)) return;
+    for (const side of [1, -1]) {
+      const r1 = hash2(i, side + 100);
+      if (r1 < 0.35) continue;
+      const wp = ctx.wallPt(s + (r1 - 0.5) * 2, side, 0.07 + hash2(i, side + 101) * 0.1);
+      const sz = 0.7 + hash2(i, side + 102) * 0.7;
+      rock(kit.lit, wp.pos.clone().addScaledVector(wp.n, -sz * 0.3), V(sz * 1.2, 0, 0).applyQuaternion(new THREE.Quaternion().setFromAxisAngle(UP, r1 * 6)), V(0, sz * 0.8, 0), V(0, 0, sz), r1 > 0.6 ? rockC : rockD, i * 3 + side, 0.35, C(0x6a645c));
+    }
+  });
+
   // rocky spikes rising from the lower walls
-  forSlots(a, b, 6, 1, (s, i) => {
+  forSlots(a, b, 5, 1, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 22)) return;
     if (hash1(i * 13 + 1) < 0.3) return;
     const side = hash1(i * 13 + 2) > 0.5 ? 1 : -1;
@@ -51,9 +66,9 @@ export function decorCavern(ctx: Ctx, a: number, b: number): void {
   });
 
   // glowing crystal clusters
-  forSlots(a, b, 9, 2, (s, i) => {
+  forSlots(a, b, 6, 2, (s, i) => {
     if (!ctx.owns(ID, s, i * 5 + 23)) return;
-    if (hash1(i * 17 + 1) < 0.3) return;
+    if (hash1(i * 17 + 1) < 0.25) return;
     const side = hash1(i * 17 + 2) > 0.5 ? 1 : -1;
     const wp = ctx.wallPt(s, side, 0.14 + hash1(i * 17 + 3) * 0.3);
     const hex = CRYSTAL[Math.floor(hash1(i * 17 + 4) * CRYSTAL.length)];
@@ -94,6 +109,7 @@ export function decorCavern(ctx: Ctx, a: number, b: number): void {
 
   // hanging vines with glowing bulbs
   forSlots(a, b, 4, 1, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 25)) return;
     const cnt = [1, 1, 2][q];
     for (let k = 0; k < cnt; k++) {
@@ -163,6 +179,7 @@ export function decorCavern(ctx: Ctx, a: number, b: number): void {
 
   // natural rock bridges
   forSlots(a, b, 90, 60, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 28)) return;
     if (hash1(i * 31 + 1) < 0.5) return;
     const wr = ctx.wallPt(s, 1, 0.5), wl = ctx.wallPt(s, -1, 0.5);

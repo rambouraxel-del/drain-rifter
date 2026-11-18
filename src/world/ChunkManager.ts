@@ -56,7 +56,7 @@ export class ChunkManager {
       }
       const s0 = this.nextS;
       const s1 = s0 + CONFIG.chunk.length;
-      this.spine.ensure(s1 + 2);
+      this.spine.ensure(s1 + 8);
       const obj = this.builder({ spine: this.spine, s0, s1, quality: q, seed: this.seed ^ Math.floor(s0) });
       this.root.add(obj);
       this.chunks.push({ s0, s1, obj });

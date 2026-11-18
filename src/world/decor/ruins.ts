@@ -17,6 +17,7 @@ export function decorRuins(ctx: Ctx, a: number, b: number): void {
 
   // columns on the ledges (some broken, some tall)
   forSlots(a, b, 7, 2, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 31)) return;
     for (const side of [1, -1]) {
       const r0 = hash2(i, side + 3);
@@ -56,6 +57,7 @@ export function decorRuins(ctx: Ctx, a: number, b: number): void {
 
   // gates: free-standing pillars on both ledges joined by a (partly broken) arch
   forSlots(a, b, 70, 15, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 33)) return;
     if (hash1(i * 13 + 1) < 0.35) return;
     const fl = ctx.frame(s);
@@ -81,6 +83,7 @@ export function decorRuins(ctx: Ctx, a: number, b: number): void {
 
   // aqueduct arches spanning the hall
   forSlots(a, b, 130, 60, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 34)) return;
     if (hash1(i * 31 + 1) < 0.25) return;
     const fl = ctx.frame(s);
@@ -165,6 +168,7 @@ export function decorRuins(ctx: Ctx, a: number, b: number): void {
 
   // hanging vines from the setbacks
   forSlots(a, b, 6, 1, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 37)) return;
     if (hash1(i * 29 + 1) < 0.35) return;
     const wp = ctx.wallPt(s + hash1(i * 29 + 2) * 5, hash1(i * 29 + 3) > 0.5 ? 1 : -1, 0.4 + hash1(i * 29 + 4) * 0.15);

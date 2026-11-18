@@ -16,6 +16,7 @@ export function decorSewer(ctx: Ctx, a: number, b: number): void {
 
   // concrete ring joints
   forSlots(a, b, 6, 0, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 1)) return;
     loopStrip(ctx, s, 0.17, 0.09, C(0x3d403c), 0, 1, q === 0 ? 5 : 9, 0.1);
   });
@@ -24,7 +25,7 @@ export function decorSewer(ctx: Ctx, a: number, b: number): void {
   forSlots(a, b, 12, 3, (s, i) => {
     if (!ctx.owns(ID, s, i * 5 + 2)) return;
     const side = i & 1 ? 1 : -1;
-    const wp = ctx.wallPt(s, side, 0.42);
+    const wp = ctx.wallPt(s, side, 0.5);
     cageLamp(ctx, wp, WARM, 3.4, 9);
     if (!kit.pre) {
       // reflection streak on the water
@@ -42,6 +43,7 @@ export function decorSewer(ctx: Ctx, a: number, b: number): void {
 
   // cable running along the left wall
   forSlots(a, b, 6, 0, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 3)) return;
     const p = ctx.wallPt(s, -1, 0.5), n = ctx.wallPt(s + 6, -1, 0.5);
     cable(ctx, p.pos.clone().addScaledVector(p.n, 0.08), n.pos.clone().addScaledVector(n.n, 0.08), 0.14, C(0x181716), 3);
@@ -49,6 +51,7 @@ export function decorSewer(ctx: Ctx, a: number, b: number): void {
 
   // big rusty pipes in 96 m runs
   forSlots(a, b, 3, 0, (s, i) => {
+    if (kit.pre) return;
     const sec = Math.floor(s / 96);
     if (!ctx.owns(ID, s, sec * 5 + 4)) return;
     if (hash1(sec * 7 + 1) < 0.3) return;
@@ -75,13 +78,13 @@ export function decorSewer(ctx: Ctx, a: number, b: number): void {
     if (!ctx.owns(ID, s, i * 5 + 5)) return;
     if (hash1(i * 17 + 5) < 0.35) return;
     const side = hash1(i * 17 + 6) > 0.5 ? 1 : -1;
-    const wp = ctx.wallPt(s, side, 0.3);
+    const wp = ctx.wallPt(s, side, 0.38);
     const mouth = wp.pos.clone().addScaledVector(wp.n, 1.05);
     prism(kit.lit, wp.pos.clone().addScaledVector(wp.n, -0.2), mouth, 0.62, 0.62, 8, C(0x74402c), true, undefined, 0.2);
     prism(kit.lit, mouth.clone().addScaledVector(wp.n, -0.45), mouth.clone().addScaledVector(wp.n, 0.02), 0.75, 0.75, 8, C(0x5a3426), false, undefined, 0.2);
     prism(kit.glow, mouth.clone().addScaledVector(wp.n, -0.05), mouth.clone().addScaledVector(wp.n, 0.0), 0.5, 0.5, 8, C(0x0a1214));
     // falling water: vertical sheet down to the floor
-    ctx.uh(s, 0.3, side, o);
+    ctx.uh(s, 0.38, side, o);
     const uMouth = o[0] - side * 1.05 * 0.88;
     const fl = ctx.frame(s);
     const bottom = ctx.rel(s, uMouth, profileHeight(uMouth, fl.width) + 0.05);
@@ -139,6 +142,7 @@ export function decorSewer(ctx: Ctx, a: number, b: number): void {
 
   // faint graffiti
   forSlots(a, b, 50, 17, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 7)) return;
     if (hash1(i * 23 + 1) < 0.45) return;
     const side = hash1(i * 23 + 2) > 0.5 ? 1 : -1;

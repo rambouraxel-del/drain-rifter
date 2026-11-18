@@ -18,7 +18,7 @@ interface FaceIn {
 
 /** Palette tweaks per biome that do not belong in the atmosphere table. */
 const MOSS = 0x56682c;
-const VOID_TINT: Partial<Record<BiomeId, number>> = { cavern: 0x050c0e, ruins: 0x0d0c18, abyss: 0x0c0618 };
+const VOID_TINT: Partial<Record<BiomeId, number>> = { cavern: 0x0a1a20, ruins: 0x0d0c18, abyss: 0x0c0618 };
 
 /** Flat colour of one terrain face for one biome (written to `o`). */
 function baseColor(b: BiomeId, f: FaceIn, o: THREE.Color): THREE.Color {
@@ -76,7 +76,7 @@ function baseColor(b: BiomeId, f: FaceIn, o: THREE.Color): THREE.Color {
     case 'cavern': {
       o.multiplyScalar(g * (0.85 + 0.3 * Math.sin(f.h * 0.9 + nv * 3)));
       o.lerp(_c3.setHex(0x1d3a40), 0.25 * (1 - t));
-      o.multiplyScalar(1 - 0.55 * smooth(0.45, 1, t));
+      o.multiplyScalar(1 - 0.4 * smooth(0.5, 1, t));
       break;
     }
     case 'ruins': {
@@ -106,7 +106,7 @@ export function buildSurface(ctx: Ctx): void {
   const kit = ctx.kit;
   const q = ctx.q;
   const K = WALL_K[q];
-  const ds = q === 0 ? 3 : 2;
+  const ds = q === 0 ? 3 : q === 1 ? 2 : 1.5;
   const rings = Math.round((ctx.s1 - ctx.s0) / ds);
   const nCurve = q === 0 ? 5 : q === 1 ? 7 : 8;
   const Fn = nCurve * 2 + 5;
@@ -222,11 +222,11 @@ export function buildSurface(ctx: Ctx): void {
 
 function sheenColor(b: BiomeId): number {
   switch (b) {
-    case 'sewer': return 0x2a5a60;
-    case 'industrial': return 0x2c2a2a;
-    case 'cavern': return 0x2f8c96;
-    case 'ruins': return 0x3a6a5c;
-    default: return 0x7a4ab0;
+    case 'sewer': return 0x3a7078;
+    case 'industrial': return 0x5e5046;
+    case 'cavern': return 0x40a0aa;
+    case 'ruins': return 0x4c8470;
+    default: return 0x8e5cc8;
   }
 }
 

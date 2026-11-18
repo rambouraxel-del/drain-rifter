@@ -49,7 +49,7 @@ export function wallShape(b: BiomeId, tau: number, side: number, s: number, half
       h = r + 15.5 * Math.pow(sn, 0.78);
       const w = smooth(0.02, 0.22, tau);
       const q = side * (1 - tau);
-      const n = (vnoise(s * 0.085, q * 3.1 + 11.3) - 0.5) * 0.46 + (vnoise(s * 0.33, q * 7.7 + 3.9) - 0.5) * 0.18;
+      const n = (vnoise(s * 0.085, q * 3.1 + 11.3) - 0.5) * 0.46 + (vnoise(s * 0.33, q * 7.7 + 3.9) - 0.5) * 0.2 + (vnoise(s * 0.7, q * 11.3 + 1.7) - 0.5) * 0.16;
       u *= 1 + n * w; h = r + (h - r) * (1 + n * 0.8 * w);
       if (tau < 0.6) u = Math.max(u, half * 1.02);
       break;

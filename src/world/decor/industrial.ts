@@ -15,6 +15,7 @@ export function decorIndustrial(ctx: Ctx, a: number, b: number): void {
 
   // vault ribs (T-section) from above the clearance zone up and over
   forSlots(a, b, 8, 0, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 11)) return;
     const n = q === 0 ? 5 : 8;
     loopStrip(ctx, s, 0.3, 0.14, steel, 0.3, 1, n);
@@ -35,6 +36,7 @@ export function decorIndustrial(ctx: Ctx, a: number, b: number): void {
 
   // overhead pipes along the ceiling
   forSlots(a, b, 4, 0, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 12)) return;
     const o = [0, 0];
     ctx.uh(s, 1, 1, o);
@@ -87,6 +89,7 @@ export function decorIndustrial(ctx: Ctx, a: number, b: number): void {
 
   // catwalks along one wall in runs
   forSlots(a, b, 4, 0, (s, i) => {
+    if (kit.pre) return;
     const sec = Math.floor(s / 52);
     if (!ctx.owns(ID, s, sec * 5 + 14)) return;
     if (hash1(sec * 13 + 3) < 0.45) return;
@@ -126,6 +129,7 @@ export function decorIndustrial(ctx: Ctx, a: number, b: number): void {
 
   // hazard stripes on the lower wall
   forSlots(a, b, 2.4, 0, (s, i) => {
+    if (kit.pre) return;
     const sec = Math.floor(s / 96);
     if (!ctx.owns(ID, s, sec * 5 + 16)) return;
     if (hash1(sec * 3 + 8) < 0.4) return;
@@ -160,6 +164,7 @@ export function decorIndustrial(ctx: Ctx, a: number, b: number): void {
 
   // vertical wall pipes
   forSlots(a, b, 30, 9, (s, i) => {
+    if (kit.pre) return;
     if (!ctx.owns(ID, s, i * 5 + 18)) return;
     if (hash1(i * 41 + 1) < 0.4) return;
     const side = hash1(i * 41 + 2) > 0.5 ? 1 : -1;
