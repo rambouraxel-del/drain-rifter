@@ -23,6 +23,7 @@ export function buildFalling(spec: ObstacleSpec, rng: RNG): THREE.Group {
   const W = widthOf(spec), D = depthOf(spec);
   const hw = W / 2;
   const chunk = new THREE.Group();
+  chunk.userData.dynamic = true;
   root.add(chunk);
 
   switch (spec.biome) {
@@ -54,6 +55,7 @@ export function buildFalling(spec: ObstacleSpec, rng: RNG): THREE.Group {
 
   const shadowG = new THREE.Group();
   shadowG.position.y = 0.02;
+  shadowG.userData.dynamic = true;
   root.add(shadowG);
   add(shadowG, geo.disc(28), decal(0x000000, 0.45), [0, 0, 0], [-PI / 2, 0, 0]);
   add(shadowG, geo.ring(32), glow(0xff7a1a, 1.2), [0, 0.01, 0], [-PI / 2, 0, 0]);

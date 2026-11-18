@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { ObstacleKind, ObstacleSpec } from '../core/types';
 import { RNG } from '../core/rng';
-import type { Builder } from './props/common';
+import { mergeStatic, type Builder } from './props/common';
 import { buildBarrier, buildCrate, buildGrate, buildPipe } from './props/sewer';
 import { buildBeam, buildFan, buildPiston, buildSaw } from './props/industrial';
 import { buildBoulder, buildRock, buildRoot, buildStalagmite } from './props/cavern';
@@ -51,6 +51,7 @@ export const createObstacleMesh: ObstacleMeshFactory = (spec) => {
   const build = BUILDERS[spec.kind];
   const obj = build ? build(spec, new RNG(spec.seed)) : fallbackBox(spec);
   obj.name = `obstacle:${spec.kind}`;
+  mergeStatic(obj);
   return obj;
 };
 

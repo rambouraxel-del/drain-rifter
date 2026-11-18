@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { RNG } from '../../core/rng';
 import type { ObstacleSpec } from '../../core/types';
 import type { ObstacleAnimState } from '../ObstacleManager';
@@ -265,5 +266,67 @@ export function rockCluster(parent: THREE.Object3D, m: THREE.Material, W: number
     const sy = rng.range(0.95, 1.45);
     const sz = (D / 2) * rng.range(0.95, 1.2);
     rock(parent, m, [sx, sy, sz], [cx, sy * 0.35, rng.range(-0.1, 0.1) * D], rng.int(0, 5), 1, [0, rng.range(0, PI), 0]);
+  }
+}
+
+// ------------------------------------------------------------------ draw-call merging
+
+const KEEP_ATTRIBUTES = new Set(['position', 'normal']);
+
+/** Copy of a mesh's geometry, non-indexed, with only position/normal, baked by m4. */
+function bakeGeometry(mesh: THREE.Mesh, m4: THREE.Matrix4): THREE.BufferGeometry {
+  const src = mesh.geometry;
+  const g = src.index ? src.toNonIndexed() : src.clone();
+  for (const name of Object.keys(g.attributes)) if (!KEEP_ATTRIBUTES.has(name)) g.deleteAttribute(name);
+  if (!g.getAttribute('normal')) g.computeVertexNormals();
+  g.applyMatrix4(m4);
+  return g;
+}
+
+/**
+ * Draw-call reduction. Merges the static meshes under `root` into one mesh per material, baking
+ * their transforms relative to `root`. Parts flagged userData.dynamic keep their transform and
+ * are merged internally (their own static pieces only), so animation still works.
+ * Merged geometry is per instance (not shared), so disposeObject frees it with the obstacle.
+ */
+export function mergeStatic(root: THREE.Object3D): void {
+  root.updateMatrixWorld(true);
+  const inv = new THREE.Matrix4().copy(root.matrixWorld).invert();
+
+  const statics: THREE.Mesh[] = [];
+  const dynamics: THREE.Object3D[] = [];
+  const collect = (o: THREE.Object3D): void => {
+    if (o.userData.dynamic) {
+      dynamics.push(o);
+      return;
+    }
+    if ((o as THREE.Mesh).isMesh) statics.push(o as THREE.Mesh);
+    for (const c of o.children) collect(c);
+  };
+  for (const c of [...root.children]) collect(c);
+
+  // Dynamic groups: merge their own static content in their local frame.
+  for (const d of dynamics) if (!(d as THREE.Mesh).isMesh) mergeStatic(d);
+  if (statics.length === 0) return;
+
+  const m4 = new THREE.Matrix4();
+  const byMaterial = new Map<THREE.Material, THREE.BufferGeometry[]>();
+  for (const mesh of statics) {
+    const material = mesh.material as THREE.Material;
+    m4.multiplyMatrices(inv, mesh.matrixWorld);
+    const list = byMaterial.get(material) ?? [];
+    list.push(bakeGeometry(mesh, m4));
+    byMaterial.set(material, list);
+    if (!mesh.geometry.userData.shared) mesh.geometry.dispose();
+    mesh.removeFromParent();
+  }
+  for (const [material, geos] of byMaterial) {
+    const merged = geos.length === 1 ? geos[0] : mergeGeometries(geos, false);
+    if (merged) {
+      root.add(new THREE.Mesh(merged, material));
+    } else {
+      // Attribute mismatch should not happen here; keep the pieces rather than lose them.
+      for (const g of geos) root.add(new THREE.Mesh(g, material));
+    }
   }
 }
