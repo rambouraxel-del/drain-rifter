@@ -35,7 +35,7 @@ export class Input {
     const stop = (e: Event) => e.preventDefault();
     document.addEventListener('gesturestart', stop, { passive: false });
     document.addEventListener('gesturechange', stop, { passive: false });
-    document.addEventListener('touchmove', (e) => { if ((e.target as HTMLElement).closest?.('input[type=range]')) return; e.preventDefault(); }, { passive: false });
+    document.addEventListener('touchmove', (e) => { if ((e.target as HTMLElement).closest?.('input[type=range], .scr')) return; e.preventDefault(); }, { passive: false });
     document.addEventListener('wheel', (e) => { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
     document.addEventListener('dblclick', stop);
     document.addEventListener('selectstart', stop);

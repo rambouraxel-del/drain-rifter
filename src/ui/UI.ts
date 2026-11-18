@@ -112,7 +112,7 @@ export class UI {
           <div class="lbl">Fin de course</div>
           <div class="big"><span class="num">0</span><small>m</small></div>
           <div class="badge" hidden>Nouveau record&nbsp;!</div>
-          <div class="stats"><div><span class="lbl">Record</span><b class="o-best">0 m</b></div><div><span class="lbl">Zone atteinte</span><b class="o-biome">-</b></div></div>
+          <div class="stats"><div><span class="lbl">Record</span><b class="o-best">0 m</b></div><div><span class="lbl">Zone</span><b class="o-biome">-</b></div></div>
         </div>
         <div class="stack"><button class="btn primary" data-a="again" style="min-width:0;font-size:22px">Rejouer</button><button class="btn" data-a="menu">Menu</button></div>
       </div>
@@ -351,6 +351,10 @@ export class UI {
   }
 
   showPause(): void {
+    this.el.hud.classList.remove('on');
+    this.el.hint.classList.remove('show');
+    this.el.biome.classList.remove('show');
+    this.setSpeedFx(0);
     this.setScreen('pause');
   }
 

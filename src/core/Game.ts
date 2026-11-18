@@ -99,6 +99,7 @@ export class Game {
       onMenu: () => this.toMenu(),
       onSettingsChange: (s) => this.applySettings(s),
       onSkipIntro: () => this.intro?.skip(),
+      onUiClick: () => this.audio.play('click'),
     }, () => this.settings);
     this.applySettings(this.settings, false);
     window.addEventListener('resize', () => this.resize());
