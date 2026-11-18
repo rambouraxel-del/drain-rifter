@@ -169,7 +169,14 @@ function simulate(seed: number, len: number, vLat = 6, delay = 0.25) {
       const c = { s0: o.s - o.depth / 2, s1: o.s + o.depth / 2, u0: ou - o.halfWidth, u1: ou + o.halfWidth };
       const ds = Math.max(c.s0 - s, 0, s - c.s1);
       const duu = Math.max(c.u0 - u, 0, u - c.u1);
-      if (ds * ds + duu * duu < R * R) return { dead: true, s, t, kind: o.kind, os: o.s, ou, u };
+      if (ds * ds + duu * duu < R * R) {
+        if (process.env.DBG) {
+          for (const x of list.filter((q) => q.s > s - 70 && q.s < s + 20)) console.log('OBS', x.kind, x.s.toFixed(1), x.u.toFixed(2), x.halfWidth.toFixed(2), x.depth.toFixed(2), x.motion ? JSON.stringify(x.motion) : '');
+          for (const p of pieces.filter((q) => q.s1 > s - 70 && q.s0 < s + 5)) console.log('PC', p.s0.toFixed(1), p.s1.toFixed(1), JSON.stringify(p.F.map((f) => [+f.lo.toFixed(2), +f.hi.toFixed(2)])), JSON.stringify(p.R.map((f) => [+f.lo.toFixed(2), +f.hi.toFixed(2)])));
+          console.log('DEAD at', s, 'u', u, 'v', v, 'time', t);
+        }
+        return { dead: true, s, t, kind: o.kind, os: o.s, ou, u };
+      }
     }
   }
   return { dead: false, s, t, kind: '', os: 0, ou: 0, u };

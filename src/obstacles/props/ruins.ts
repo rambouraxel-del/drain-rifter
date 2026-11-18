@@ -52,6 +52,7 @@ export function buildStatue(spec: ObstacleSpec, rng: RNG): THREE.Group {
 }
 
 /** Heap of broken stone: a dark base plus a mound of chunks reaching about 1.3 m. */
+// Chunk count scales with footprint area (capped at 40 to stay within the wide-prop budget).
 export function buildRubble(spec: ObstacleSpec, rng: RNG): THREE.Group {
   const g = new THREE.Group();
   const W = widthOf(spec), D = depthOf(spec);

@@ -248,7 +248,8 @@ export function moundSpots(rng: RNG, W: number, D: number, n: number, peak: numb
     const t = i === 0 ? 0 : rng.range(-1, 1);
     const x = t * (W / 2) * 0.85;
     const z = rng.range(-0.4, 0.4) * D;
-    const y = i === 0 ? peak : size * 0.4 + (1 - t * t) * peak * rng.range(0.2, 0.9);
+    // Most pieces stay well above the ground so the heap reads as a wall even across wide spans.
+    const y = i === 0 ? peak : size * 0.4 + peak * rng.range(0.3, 1.0) * (1 - 0.5 * t * t);
     out.push([x, y, z]);
   }
   return out;
