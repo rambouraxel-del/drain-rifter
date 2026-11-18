@@ -149,13 +149,12 @@ export function advanceCorridor(
     if (w.w0 > st.s && w.w0 < sTo) bp.push(w.w0);
     if (w.w1 > st.s && w.w1 < sTo) bp.push(w.w1);
   }
+  // Global grid (multiples of maxPiece) so incremental and whole-layout sweeps split pieces identically.
+  for (let g = Math.floor(st.s / o.maxPiece + 1) * o.maxPiece; g < sTo; g += o.maxPiece) bp.push(g);
   bp.sort((a, b) => a - b);
   const pts: number[] = [];
   for (let i = 0; i < bp.length - 1; i++) {
-    const a = bp[i], b = bp[i + 1];
-    if (b - a < 1e-6) continue;
-    const n = Math.max(1, Math.ceil((b - a) / o.maxPiece));
-    for (let k = 0; k < n; k++) pts.push(a + ((b - a) * k) / n);
+    if (bp[i + 1] - bp[i] >= 1e-6) pts.push(bp[i]);
   }
   pts.push(sTo);
 

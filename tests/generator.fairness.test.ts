@@ -6,7 +6,7 @@ import { CONFIG } from '../src/core/config';
 import { BIOME_ORDER, type ObstacleSpec, type SegmentPlan } from '../src/core/types';
 
 const LEN = 20000;
-const SEEDS = [1, 7, 42, 1234, 987654, 31337];
+const SEEDS = [1, 7, 42, 1234, 987654, 31337, ...Array.from({ length: 14 }, (_, i) => 5000 + i * 7919)];
 const R = CONFIG.player.radius;
 
 function generate(seed: number, len = LEN) {

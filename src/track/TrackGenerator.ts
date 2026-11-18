@@ -294,7 +294,7 @@ export class TrackGenerator implements SegmentSource {
       const st = this.cstate;
       const freeEst = st.freeT + Math.max(0, sStart - 1.6 - st.s) / v;
       const reach = Math.max(0, GEN_VLAT * (freeEst - CORRIDOR_DEFAULTS.reaction)) * 0.9;
-      const opts: CorridorOpts = { ...CORRIDOR_DEFAULTS, minGap: g };
+      const opts: CorridorOpts = { ...CORRIDOR_DEFAULTS, minGap: g + 0.03 };
       let committed = false;
       let endS = sStart;
       for (let attempt = 0; attempt < 10 && !committed; attempt++) {
@@ -316,6 +316,10 @@ export class TrackGenerator implements SegmentSource {
         this.ensurePlanTo(e + 10);
         const viol: Violation[] = [];
         const ns = advanceCorridor(cloneState(st), specs, e, widthAt, opts, { violations: viol });
+        if (viol.length) continue;
+        // Look ahead over free track: the width may narrow right after the pattern and prune the gap.
+        this.ensurePlanTo(e + 60);
+        advanceCorridor(cloneState(ns), [], e + 45, widthAt, opts, { violations: viol });
         if (viol.length) continue;
         this.specs.push(...specs);
         this.cstate = ns;
