@@ -40,8 +40,16 @@ async function waitMenu(page) {
   await sleep(500);
 }
 /** Click Jouer for real, then skip the intro with the real Passer button if it shows, until 'playing'. */
+/** Real mouse click at the element centre. Used for Jouer: #scr-menu .btn.primary pulses forever (CSS
+ *  animation), so Playwright's own stability wait can time out under slow swiftshader frames. */
+async function clickReal(page, loc) {
+  await loc.waitFor({ state: 'visible', timeout: 15000 });
+  const bb = await loc.boundingBox();
+  if (!bb) throw new Error('clickReal: no bounding box');
+  await page.mouse.click(bb.x + bb.width / 2, bb.y + bb.height / 2);
+}
 async function startRunReal(page) {
-  await page.locator('#scr-menu button[data-a="play"]').click();
+  await clickReal(page, page.locator('#scr-menu button[data-a="play"]'));
   const deadline = Date.now() + 25000;
   let sawIntro = false;
   while (Date.now() < deadline) {
